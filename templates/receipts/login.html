@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+    <main class="page">
+        <section class="modal-wrap">
+            <div class="modal-card">
+                <h1>Вход в личный кабинет</h1>
+                <p class="modal-sub">Авторизуйтесь, чтобы регистрировать чеки и смотреть их статус</p>
+                {% if form.errors %}
+                    <div class="form-banner is-error">Неверный логин или пароль</div>
+                {% endif %}
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <label class="field">
+                        <span>Логин</span>
+                        <input type="text" name="username" value="{{ form.username.value|default:'' }}" autocomplete="username">
+                    </label>
+                    <label class="field">
+                        <span>Пароль</span>
+                        <input type="password" name="password" autocomplete="current-password">
+                    </label>
+                    <button class="btn btn-primary btn-block" type="submit">Войти</button>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

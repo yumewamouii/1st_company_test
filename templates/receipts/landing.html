@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Акция{% endblock %}
+
+{% block content %}
+<section class="cabinet-card content-card">
+    <h1>Регистрация чеков</h1>
+    <p>
+        Период акции: {{ promo_start|date:"d.m.Y" }} — {{ promo_end|date:"d.m.Y" }}.
+        Принимаются чеки от {{ min_receipt_amount }} ₽.
+    </p>
+    <p>Войдите в личный кабинет, чтобы добавить чек и следить за статусом проверки.</p>
+    <a class="btn btn-primary" href="{% url 'cabinet' %}">Личный кабинет</a>
+</section>
+{% endblock %}

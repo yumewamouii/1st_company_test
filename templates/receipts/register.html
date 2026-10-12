@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Регистрация чека{% endblock %}
+
+{% block content %}
+<section class="modal-wrap">
+    <div class="modal-card" id="register-card">
+        <div class="modal-head">
+            <div>
+                <h1>Регистрация чека</h1>
+                <p class="modal-sub">Введите необходимые данные с чека</p>
+                <p class="promo-period">
+                    Период акции: {{ promo_start|date:"d.m.Y" }} — {{ promo_end|date:"d.m.Y" }}
+                </p>
+            </div>
+            <a class="icon-button close-btn" href="{% url 'cabinet' %}" aria-label="Закрыть">
+                ×
+            </a>
+        </div>
+
+        <div class="form-banner" id="form-banner" hidden></div>
+
+        <form id="receipt-form" novalidate>
+            {% csrf_token %}
+            <label class="field">
+                <span>ФН</span>
+                <input type="text" name="fn" inputmode="numeric" autocomplete="off" placeholder="Введите ФН" maxlength="32">
+                <span class="field-error" data-error-for="fn"></span>
+            </label>
+
+            <label class="field">
+                <span>Номер чека</span>
+                <input type="text" name="fd" inputmode="numeric" autocomplete="off" placeholder="Введите номер чека (ФД)" maxlength="32">
+                <span class="field-error" data-error-for="fd"></span>
+            </label>
+
+            <label class="field">
+                <span>ФП</span>
+                <input type="text" name="fp" inputmode="numeric" autocomplete="off" placeholder="Введите ФП" maxlength="64">
+                <span class="field-error" data-error-for="fp"></span>
+            </label>
+
+            <label class="field">
+                <span>Дата покупки</span>
+                <span class="input-with-icon">
+                    <input type="text" name="purchase_date" autocomplete="off" placeholder="ДД.ММ.ГГГГ">
+                    <span class="input-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <rect x="2.5" y="3.5" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
+                            <path d="M2.5 7h13M6 2.5v2.5M12 2.5v2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </span>
+                <span class="field-error" data-error-for="purchase_date"></span>
+            </label>
+
+            <label class="field">
+                <span>Сумма</span>
+                <span class="input-with-icon">
+                    <input type="text" name="amount" inputmode="decimal" autocomplete="off" placeholder="0.00">
+                    <span class="input-suffix">₽</span>
+                </span>
+                <span class="field-error" data-error-for="amount"></span>
+            </label>
+
+            <button class="btn btn-primary btn-block" type="submit" id="submit-btn">Загрузить</button>
+        </form>
+    </div>
+
+    <div class="modal-card success-card" id="success-card" hidden>
+        <div class="success-icon" aria-hidden="true">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <circle cx="18" cy="18" r="18" fill="#22C55E"/>
+                <path d="M10 18.5 15.5 24 26 12" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h1>Ваш чек загружен</h1>
+        <p class="modal-sub">
+            Мы уже начали анализировать ваши покупки.<br>
+            Это займет всего пару секунд.
+        </p>
+        <a class="btn btn-primary" href="{% url 'cabinet' %}">На главную</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.RECEIPT_CONFIG = {
+        submitUrl: "{% url 'create_receipt' %}",
+        minAmount: {{ min_receipt_amount }},
+        promoStart: "{{ promo_start|date:'Y-m-d' }}",
+        promoEnd: "{{ promo_end|date:'Y-m-d' }}"
+    };
+</script>
+<script src="{% static 'js/register.js' %}"></script>
+{% endblock %}
